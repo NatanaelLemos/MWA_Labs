@@ -5,48 +5,38 @@
 
     // Fix the slow function to be asynchronous/non-blocking 
     function slow(callback) {
-        setImmediate(() => {
-            for (let i = 0; i <= 5e8; i++) {}
+        for (let i = 0; i <= 5e8; i++) {}
 
-            if (Math.random() > 0.5) {
-                return callback("Error", null);
-            }
+        if (Math.random() > 0.5) {
+            return callback("Error", null);
+        }
 
-            callback(null, {
-                id: 12345
-            });
+        return callback(null, {
+            id: 12345
         });
     }
 
     function exec(fn) {
         // Complete the code here to implement chaining with callback 
-        this.done = (donefn) => {
-            this._donefn = donefn;
-            this._execute();
+        this.done = (doneFn) => {
+            this._doneFn = doneFn;
             return this;
         };
 
-        this.fail = (failfn) => {
-            this._failfn = failfn;
-            this._execute();
+        this.fail = (failFn) => {
+            this._failFn = failFn;
             return this;
         };
 
-        this._execute = () => {
-            if (!this._failfn || !this._donefn) {
-                return;
-            }
-
-            const callback = (type, value) => {
-                if (type && type === 'Error') {
-                    this._failfn(value);
+        setImmediate(() => {
+            fn((type, obj) => {
+                if (type === 'Error') {
+                    this._failFn(obj);
                 } else {
-                    this._donefn(value);
+                    this._doneFn(obj);
                 }
-            };
-
-            fn(callback);
-        };
+            });
+        });
 
         return {
             done: this.done,
@@ -61,4 +51,5 @@
         .fail(function (err) {
             console.log("Error: " + err);
         });
+
 })();
