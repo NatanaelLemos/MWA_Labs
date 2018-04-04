@@ -10,9 +10,9 @@ setImmediate results are processed before setTimeout results, so if you have a s
 
 ## 2.Explain the difference between process.nextTick and setImmediate? 
 
-setImmediate delegates the execution to libuv and OS and after finish, it only returns to the execution stack when the stack is empty.
+setImmediate is executed with default priority in the "check" state of the event loop, which means it will be pushed in the end of the queue and only executed in the next iteration.
 
-process.nextTick just push the "callback" to the next stack position, but it's still executed by V8 main thread
+process.nextTick has more priority because in the end of the event loop all the "nextTick" queue is executed, it provides more efficiency but is dangerous because it can block I/O.
 
 ## 3.Name 10 global modules available in Node environment. 
 
