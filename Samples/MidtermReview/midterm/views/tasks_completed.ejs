@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Tasks</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body>
+    <% tasks.forEach(function(task){%>
+        <div>
+            <%= task.task %>
+                <form method="POST" action="/tasks/<%=task._id%>">
+                    <button type="submit">done</button>
+                </form>
+                <button type="button" id="delete" data-id="<%=task._id%>">delete</button>
+        </div>
+        <%})%>
+
+            <form method="POST" action="/tasks">
+                <input type="text" name="task" id="task" />
+                <button type="submit">Submit</button>
+            </form>
+</body>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+    $('#delete').on('click', function () {
+        var id = $(this).attr('data-id');
+        $.ajax({
+            type: 'DELETE',
+            url: '/tasks/' + id
+        })
+        .done(() => {
+            window.location.href = '/tasks';
+        });
+    });
+</script>
+
+</html>
