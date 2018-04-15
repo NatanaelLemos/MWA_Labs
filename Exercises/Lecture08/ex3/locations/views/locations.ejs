@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Search</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body>
+    <h1>Search</h1>
+    <fieldset class="gllpLatlonPicker">
+        <div>
+            <input type="text" class="gllpSearchField">
+            <input type="button" class="gllpSearchButton" value="search" style="display:none">
+            <button class="search">Search</button>
+        </div>
+        <div>
+            <select class="category">
+                <% categories.forEach(function(col){ %>
+                    <option value="<%=col.name%>">
+                        <%=col.name%>
+                    </option>
+                    <%})%>
+            </select>
+        </div>
+
+        <div class="gllpMap">Google Maps</div>
+        <input type="hidden" class="gllpLatitude" value="41.0178238" />
+        <input type="hidden" class="gllpLongitude" value="-91.96729060" />
+        <input type="hidden" class="gllpZoom" value="3" />
+    </fieldset>
+
+    <ul class="locations">
+    </ul>
+
+    <script src="js/jquery-2.1.1.min.js"></script>
+    <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <link rel="stylesheet" type="text/css" href="css/jquery-gmaps-latlon-picker.css" />
+    <script src="js/jquery-gmaps-latlon-picker.js"></script>
+
+    <script>
+        $(() => {
+            search();
+            $('.search').on('click', () => {
+                if ($('.gllpSearchField').val()) {
+                    $('.gllpSearchButton').click();
+                }
+                search();
+            });
+
+            function search() {
+                $('.locations').html('');
+                $.get('/locations/search', {
+                        latitude: $('.gllpLatitude').val(),
+                        longitude: $('.gllpLongitude').val(),
+                        category: $('.category').val()
+                    })
+                    .done((data) => {
+                        data.locations.forEach(location => {
+                            $('.locations').append(
+                                `<li> Name: ${location.name}  -  Category: ${location.category} </li> `
+                            );
+                        });
+                    });
+            }
+        });
+    </script>
+</body>
+
+</html>
