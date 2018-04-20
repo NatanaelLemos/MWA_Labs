@@ -1,0 +1,28 @@
+<form novalidate (ngSubmit)="submit()" #f="ngForm" class="container">
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input type="text" id="name" name="name" class="form-control" [(ngModel)]="user.name" required #name="ngModel" />
+    <div *ngIf="name.errors && (name.dirty || name.touched)">
+      <p *ngIf="name.errors.required">Name is required</p>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="email">Email</label>
+    <input type="email" id="email" name="email" class="form-control" [(ngModel)]="user.email" required pattern="[^ @]*@[^ @]*" #email="ngModel" />
+    <div *ngIf="email.errors && (email.dirty || email.touched)">
+      <p *ngIf="email.errors.required">Email is required</p>
+      <p *ngIf="email.errors.pattern">Email must contain at least the @ character</p>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="post">Post</label>
+    <textarea id="post" name="post" class="form-control" [(ngModel)]="user.post" required minlength="10" #post="ngModel"></textarea>
+    <div *ngIf="post.errors && (post.dirty || post.touched)">
+      <p *ngIf="post.errors.required">Post is required</p>
+      <p *ngIf="post.errors.minlength">Post must contain at least 10 characters</p>
+    </div>
+  </div>
+
+  <button type="submit" [disabled]="f.invalid" class="btn btn-primary">Submit</button>
+  <button type="button" class="btn btn-default" (click)="getData()" >Get data</button>
+</form>
