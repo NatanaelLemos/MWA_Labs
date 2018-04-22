@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Http } from '@angular/http';
 import { forkJoin } from 'rxjs/observable/forkJoin';
+import { UserService } from '../services/userService';
 
 @Component({
   selector: 'app-user-component',
@@ -15,20 +16,21 @@ export class UserComponentComponent implements OnInit {
     post: ''
   };
 
-  constructor(private http: Http) { }
+  @ViewChild('f') form: any;
+
+  constructor(private http: Http, private userService: UserService) { }
 
   ngOnInit() {
   }
 
   submit() {
-    console.dir(this.user);
+    if (this.form.valid) {
+      this.userService.submit(this.user);
+    }
   }
 
   getData() {
-    forkJoin([
-      this.http.get('http://jsonplaceholder.typicode.com/users/1'),
-      this.http.get('http://jsonplaceholder.typicode.com/posts?userId=1 ')
-    ]).subscribe(results => {
+    this.userService.get().subscribe(results => {
       this.user.name = results[0].json().name;
       this.user.email = results[0].json().email;
       this.user.post = results[1].json()[0].body;

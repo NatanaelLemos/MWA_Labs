@@ -1,0 +1,12 @@
+<table>
+  <tr>
+    <td>Student</td>
+    <td>Link</td>
+  </tr>
+
+  <ul>
+    <li *ngFor="let student of students">
+      <a href="/profile/{{student.id}}">{{student.name}}</a>
+    </li>
+  </ul>
+</table>
